@@ -11,11 +11,12 @@ const proxy = httpProxy.createProxyServer();
 
 const router = express.Router();
 
-router.get('/another', (req, res) => res.json({ route: req.originalUrl }));
+const uri = process.env.TARGET_URL
+
+router.get('/another', (req, res) => res.json({ route: uri }));
 router.post('/', (req, res) => res.json({ postBody: req.body }));
 router.get('/', (req, res) => {
-  const url = 'http://104.208.71.137:3000'
-  proxy.web(req, res, {target: url})
+  proxy.web(req, res, {target: uri})
 });
 
 app.use(bodyParser.json());
