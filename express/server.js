@@ -15,13 +15,14 @@ const uri = process.env.TARGET_URL
 
 router.get('/another', (req, res) => res.json({ route: uri }));
 router.post('/', (req, res) => res.json({ postBody: req.body }));
-router.get('/', (req, res) => {
-  proxy.web(req, res, {target: uri})
+
+// Proxy all other requests to the target server
+app.use('/', (req, res) => {
+  proxy.web(req, res, {target: uri});
 });
 
 app.use(bodyParser.json());
-app.use('/.netlify/functions/server', router);  // path must route to lambda
-app.use('/', router);
+app.use('/.netlify/functions/server', router);
 
 
 module.exports = app;
